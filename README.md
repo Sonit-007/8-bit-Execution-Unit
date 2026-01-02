@@ -1,4 +1,4 @@
-# 8-Bit Arithmetic Logic Unit
+# 8-Bit Execution Unit
 
 This repository contains a **CPU-style 8-bit execution unit** implemented in **Verilog HDL**, featuring a single-cycle ALU and multi-cycle signed multiplication and division using **FSM-controlled datapaths**.
 
