@@ -26,13 +26,12 @@ module alu_fsm_controlled (
     // --------------------------------------------------
     // FSM STATE DEFINITIONS
     // --------------------------------------------------
-    typedef enum logic [1:0] {
-        IDLE = 2'b00,   // waiting for start
-        EXEC = 2'b01,   // operation executing
-        DONE = 2'b10    // operation just completed
-    } state_t;
 
-    state_t state, next_state;
+    parameter EXEC = 2'b01;   // operation executing
+    parameter IDLE = 2'b00;   // waiting for start
+    parameter DONE = 2'b10;   // operation just completed
+
+    reg [1:0] state, next_state;
 
     // --------------------------------------------------
     // COMBINATIONAL ALU (DATAPATH)
