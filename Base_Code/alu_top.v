@@ -1,4 +1,4 @@
-// 8-bit ALU (Phase 1)
+// 8-bit ALU 
 // Supports ADD, SUB, AND, OR, XOR, NOT
 
 module alu_top (

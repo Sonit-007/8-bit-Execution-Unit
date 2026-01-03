@@ -1,8 +1,5 @@
-// ======================================================
 // Signed-Magnitude Multiplier (8-bit)
 // FSM-controlled, multi-cycle, shift-add algorithm
-// PURE VERILOG-2001 (Quartus compatible)
-// ======================================================
 
 module signed_mag_multiplier (
     input        clk,
@@ -15,9 +12,6 @@ module signed_mag_multiplier (
     output            done
 );
 
-    // --------------------------------------------------
-    // FSM STATE ENCODING (Verilog style)
-    // --------------------------------------------------
     parameter IDLE      = 3'b000;
     parameter INIT      = 3'b001;
     parameter CHECK     = 3'b010;
@@ -28,25 +22,17 @@ module signed_mag_multiplier (
 
     reg [2:0] state, next_state;
 
-    // --------------------------------------------------
-    // DATAPATH REGISTERS
-    // --------------------------------------------------
     reg [7:0] M;        // multiplicand magnitude
     reg [7:0] Q;        // multiplier magnitude
     reg [7:0] ACC;      // accumulator
     reg [2:0] COUNT;    // loop counter
     reg       SIGN;     // final sign
 
-    // --------------------------------------------------
-    // STATE REGISTER
-    // --------------------------------------------------
     always @(posedge clk) begin
         state <= next_state;
     end
 
-    // --------------------------------------------------
     // NEXT STATE LOGIC
-    // --------------------------------------------------
     always @(*) begin
         next_state = state;
 
@@ -90,9 +76,6 @@ module signed_mag_multiplier (
         endcase
     end
 
-    // --------------------------------------------------
-    // DATAPATH OPERATIONS
-    // --------------------------------------------------
     always @(posedge clk) begin
         case (state)
 
@@ -123,9 +106,6 @@ module signed_mag_multiplier (
         endcase
     end
 
-    // --------------------------------------------------
-    // CONTROL SIGNALS
-    // --------------------------------------------------
     assign busy = (state != IDLE && state != DONE);
     assign done = (state == DONE);
 

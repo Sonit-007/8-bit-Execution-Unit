@@ -1,7 +1,5 @@
-// ======================================================
 // CPU-Style Execution Unit Top
-// ALU (single-cycle) + MUL (multi-cycle) + DIV (multi-cycle)
-// ======================================================
+// ALU (single-cycle) + MUL & DIV (multi-cycle)
 
 module execution_unit_top (
     input        clk,
@@ -15,9 +13,6 @@ module execution_unit_top (
     output            done
 );
 
-    // --------------------------------------------------
-    // ALU UNIT (8-bit result)
-    // --------------------------------------------------
     wire [7:0] alu_result;
     wire       alu_busy, alu_done;
 
@@ -32,9 +27,7 @@ module execution_unit_top (
         .done(alu_done)
     );
 
-    // --------------------------------------------------
     // MULTIPLIER UNIT (16-bit result)
-    // --------------------------------------------------
     wire [15:0] mul_result;
     wire        mul_busy, mul_done;
 
@@ -48,9 +41,7 @@ module execution_unit_top (
         .done(mul_done)
     );
 
-    // --------------------------------------------------
     // DIVIDER UNIT (8-bit quotient, remainder ignored)
-    // --------------------------------------------------
     wire [7:0] div_quotient;
     wire [7:0] div_remainder;
     wire       div_busy, div_done;
@@ -66,15 +57,12 @@ module execution_unit_top (
         .done(div_done)
     );
 
-    // --------------------------------------------------
     // GLOBAL BUSY / DONE
-    // --------------------------------------------------
     assign busy = alu_busy | mul_busy | div_busy;
     assign done = alu_done | mul_done | div_done;
 
-    // --------------------------------------------------
     // RESULT SELECTION (CPU-style MUX)
-    // --------------------------------------------------
+
     always @(*) begin
         case (opcode)
             4'b1000: result = mul_result;               // MUL

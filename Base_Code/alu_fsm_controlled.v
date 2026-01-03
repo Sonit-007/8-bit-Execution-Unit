@@ -1,10 +1,5 @@
-// ======================================================
-// ALU with FSM-based control (Phase 2.3)
-// - Pure combinational ALU datapath
-// - Explicit FSM for operation lifecycle
-// - Registered outputs
+// ALU with FSM-based control 
 // - start / busy / done handshake
-// ======================================================
 
 module alu_fsm_controlled (
     input        clk,
@@ -23,19 +18,12 @@ module alu_fsm_controlled (
     output            done
 );
 
-    // --------------------------------------------------
-    // FSM STATE DEFINITIONS
-    // --------------------------------------------------
-
     parameter EXEC = 2'b01;   // operation executing
     parameter IDLE = 2'b00;   // waiting for start
-    parameter DONE = 2'b10;   // operation just completed
+    parameter DONE = 2'b10;   // operation completed
 
     reg [1:0] state, next_state;
 
-    // --------------------------------------------------
-    // COMBINATIONAL ALU (DATAPATH)
-    // --------------------------------------------------
     wire [7:0] alu_result;
     wire Z_int, N_int, C_int, V_int;
 
@@ -50,16 +38,10 @@ module alu_fsm_controlled (
         .V(V_int)
     );
 
-    // --------------------------------------------------
-    // STATE REGISTER (TIME MEMORY)
-    // --------------------------------------------------
     always @(posedge clk) begin
         state <= next_state;
     end
 
-    // --------------------------------------------------
-    // NEXT-STATE LOGIC (CONTROL DECISIONS)
-    // --------------------------------------------------
     always @(*) begin
         next_state = state;
 
@@ -70,12 +52,10 @@ module alu_fsm_controlled (
             end
 
             EXEC: begin
-                // Single-cycle operations complete here
                 next_state = DONE;
             end
 
             DONE: begin
-                // DONE is a transient state (one cycle only)
                 next_state = IDLE;
             end
 
@@ -83,9 +63,6 @@ module alu_fsm_controlled (
         endcase
     end
 
-    // --------------------------------------------------
-    // REGISTERED OUTPUT CAPTURE
-    // --------------------------------------------------
     always @(posedge clk) begin
         if (state == EXEC) begin
             result <= alu_result;
@@ -96,9 +73,6 @@ module alu_fsm_controlled (
         end
     end
 
-    // --------------------------------------------------
-    // CONTROL SIGNALS DERIVED FROM STATE
-    // --------------------------------------------------
     assign busy = (state == EXEC);
     assign done = (state == DONE);
 
