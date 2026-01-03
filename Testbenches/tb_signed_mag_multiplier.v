@@ -11,9 +11,6 @@ module tb_signed_mag_multiplier;
     wire        busy;
     wire        done;
 
-    // --------------------------------------------------
-    // DUT: Signed Magnitude Multiplier
-    // --------------------------------------------------
     signed_mag_multiplier DUT (
         .clk(clk),
         .start(start),
@@ -24,15 +21,9 @@ module tb_signed_mag_multiplier;
         .done(done)
     );
 
-    // --------------------------------------------------
-    // Clock generation (10 ns period)
-    // --------------------------------------------------
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // --------------------------------------------------
-    // Task: run one multiplication
-    // --------------------------------------------------
     task run_mul;
         input signed [7:0] a;
         input signed [7:0] b;
@@ -45,10 +36,8 @@ module tb_signed_mag_multiplier;
             @(negedge clk);
             start = 1'b0;
 
-            // Wait for multiplier to finish
             wait(done);
 
-            // Sample result cleanly
             @(posedge clk);
 
             $display(
@@ -60,21 +49,15 @@ module tb_signed_mag_multiplier;
         end
     endtask
 
-    // --------------------------------------------------
-    // Test sequence
-    // --------------------------------------------------
     initial begin
-        // Init
+        
         start = 0;
         A     = 0;
         B     = 0;
 
-        // Allow FSM to settle
         repeat(2) @(negedge clk);
 
-        // -------------------------------
         // Test cases
-        // -------------------------------
 
         // + × +
         run_mul( 8'd5,  8'd3);     // 15

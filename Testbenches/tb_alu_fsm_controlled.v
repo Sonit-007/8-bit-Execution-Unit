@@ -12,9 +12,6 @@ module tb_alu_fsm_controlled;
     wire       busy;
     wire       done;
 
-    // -----------------------------------------
-    // DUT: ALU FSM
-    // -----------------------------------------
     alu_fsm_controlled DUT (
         .clk(clk),
         .start(start),
@@ -26,15 +23,11 @@ module tb_alu_fsm_controlled;
         .done(done)
     );
 
-    // -----------------------------------------
     // Clock generation (10 ns period)
-    // -----------------------------------------
     initial clk = 0;
     always #5 clk = ~clk;
 
-    // -----------------------------------------
     // Task to apply one ALU operation
-    // -----------------------------------------
     task run_op;
         input [3:0] op;
         input [7:0] a;
@@ -49,7 +42,6 @@ module tb_alu_fsm_controlled;
             @(negedge clk);
             start  = 1'b0;
 
-            // Wait for done
             wait(done);
 
             $display(
@@ -61,9 +53,6 @@ module tb_alu_fsm_controlled;
         end
     endtask
 
-    // -----------------------------------------
-    // Test sequence
-    // -----------------------------------------
     initial begin
         // Init
         start  = 0;
@@ -71,7 +60,6 @@ module tb_alu_fsm_controlled;
         A      = 0;
         B      = 0;
 
-        // Wait for reset-less stabilization
         repeat(2) @(negedge clk);
 
         // ADD
